@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>VideoChat</title>
+    <script type='text/javascript' src='./webrtc.js'></script>
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">VideoChat(仮)</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <center>
+                    <button type="button" onclick="startVideo();">Start Video</button>
+                    <button type="button" onclick="stopVideo();">Stop Video</button>
+                </center>
+                <br />
+                <video id="local_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>
+                <br>
+                <p>SDP to send:<br />
+                    <textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>
+                </p>
+            </div>
+            <div class="col-md-6">
+                <center>
+                    <button type="button" onclick="connect();">Connect</button>
+                    <button type="button" onclick="hangUp();">Hang Up</button>
+                </center>
+                <br />
+                <video id="remote_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>
+                <p>SDP to receive:&nbsp;
+                    <button type="button" onclick="onSdpText();">Receive remote SDP</button><br />
+                    <textarea id="text_for_receive_sdp" rows="5" cols="60"></textarea>
+                </p>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="js/jquary.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+</body>
+<script>
+    // use Firebase
+    var config = {
+        apiKey: "AIzaSyDO4f0oz84hozRESWKEy5_iqfkMiPmmDks",
+        authDomain: "analytics-test-80947.firebaseapp.com",
+        databaseURL: "https://analytics-test-80947.firebaseio.com",
+        projectId: "analytics-test-80947",
+        storageBucket: "analytics-test-80947.appspot.com",
+        messagingSenderId: "574247415591"
+    };
+    firebase.initializeApp(config);
+
+    const dataDebugFlag = false;
+    let room = getRoomName();
+    let database = firebase.database();
+    let databaseRoot = 'lt2017/multi';
+    let roomBroadcastRef;
+    let clientRef;
+    let clientId;
+    joinRoom(room);
+    serRoomLink(room);
+
+    function joinRoom(room) {
+        console.log('join room name = ' + room);
+        let key = database.ref(databaseRoot + room + '/_join_').push({
+            joined: 'unknown'
+        }).key
+        clientId = 'member_' + key;
+        console.log('join to room = ' + room + ' as clentId' + clientId);
+        database.ref(databaseRoot + room + '/_join_/' + key).uodate({
+            joined: clientId
+        });
+        if (!dataDebugFlag) {
+            let joinRef = database.ref(databaseRoot + room + '/_join_/' + key);
+            joinRef.remove();
+        }
+
+
+    }
+</script>
+
+</html>

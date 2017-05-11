@@ -6,7 +6,7 @@ let localStream = null;
 let peerConnection = null;
 
 function startVideo() {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
         .then(function(stream) {
             playVideo(localVideo, stream);
             localStream = stream;
@@ -21,6 +21,12 @@ function playVideo(element, stream) {
     element.srcObject = stream;
     element.play();
 }
+
+function stopVideo() {
+        pauseVideo(localVideo);
+        stopLocalStream(localStream);
+        localStream = null;
+    }
 
 // WebRTCを利用する準備をする
 function prepareNewConnection() {
@@ -216,7 +222,7 @@ function cleanupVideoElement(element) {
 }
 
 const wsUrl = 'ws://localhost:3001/';
-// const wsUrl = 'ws://192.168.1.60:3001/';
+// const wsUrl = 'ws://192.168.1.61:3001/';
 const ws = new WebSocket(wsUrl);
 ws.onopen = function(evt) {
     console.log('ws open()');

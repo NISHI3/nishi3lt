@@ -29,42 +29,46 @@
             </div>
         </div>
     </nav>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-6">
-                <center>
-                    <button type="button" onclick="startVideo();">Start Video</button>
-                    <button type="button" onclick="stopVideo();">Stop Video</button>
-                    <button type="button" onclick="connect();">Connect</button>
-                    <button type="button" onclick="hangUp();">Hang Up</button>
-                    <br>
-                    <a id="room_link" href="" target="_blank">another window</a>
-                </center>
-                <br />
-                <video id="local_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>
-                <br>
-                <!--<p>SDP to send:<br />-->
-                <!--<textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>-->
-                </p>
-            </div>
-            <div class="col-md-6">
-                <center>
-                    <!--<button type="button" onclick="connect();">Connect</button>
+    <!--<div class="container">-->
+    <!--<div class="row">-->
+    <!--<div class="col-md-6">-->
+    <center>
+        <button type="button" onclick="startVideo();">Start Video</button>
+        <button type="button" onclick="stopVideo();">Stop Video</button>
+        <button type="button" onclick="connect();">Connect</button>
+        <button type="button" onclick="hangUp();">Hang Up</button>
+        <br>
+        <a id="room_link" href="" target="_blank">another window</a>
+    </center>
+    <br />
+    <div>
+        <video id="local_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>
+    </div>
+    <br>
+    <!--<p>SDP to send:<br />-->
+    <!--<textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>-->
+    </p>
+    <!--</div>-->
+    <!--<div class="col-md-6">-->
+    <center>
+        <!--<button type="button" onclick="connect();">Connect</button>
                     <button type="button" onclick="hangUp();">Hang Up</button>
                     <a id="room_link" href="" target="_blank">another window</a>
                     <a id="mail_link" href="" target="_blank">Mail link</a>-->
-                </center>
-                <br />
-                <br>
-                <!--<video id="remote_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>-->
-                <div id="container">
-                    <!--<p>SDP to receive:&nbsp;
+    </center>
+    <br />
+    <br>
+    <div>
+        <!--<video id="remote_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>-->
+        <div id="container">
+        </div>
+        <!--<p>SDP to receive:&nbsp;
                     <button type="button" onclick="onSdpText();">Receive remote SDP</button><br />
                     <textarea id="text_for_receive_sdp" rows="5" cols="60"></textarea>
                 </p>-->
-                </div>
-            </div>
-        </div>
+        <!--</div>-->
+        <!--</div>-->
+        <!--</div>-->
 
 
         <script src="js/jquary.min.js"></script>

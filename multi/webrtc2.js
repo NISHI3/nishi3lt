@@ -122,10 +122,10 @@ function stopLocalStream(stream) {
 
 function getDeviceStream(option) {
     if ('getUserMedia' in navigator.mediaDevices) {
-        console.log('navigator.mediaDevices.getUserMadia');
+        console.log('navigator.mediaDevices.getUserMedia');
         return navigator.mediaDevices.getUserMedia(option);
     } else {
-        console.log('wrap navigator.getUserMadia with Promise');
+        console.log('wrap navigator.getUserMedia with Promise');
         return new Promise(function(resolve, reject) {
             navigator.getUserMedia(option, resolve, reject);
         });

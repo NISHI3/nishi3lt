@@ -4,9 +4,14 @@ const textForSendSdp = document.getElementById('text_for_send_sdp');
 const textToReceiveSdp = document.getElementById('text_for_receive_sdp');
 let localStream = null;
 let peerConnection = null;
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
+RTCSessionDescription = window.RTCSessionDescription || window.webkitRTCSessionDescription || window.mozRTCSessionDescription;
+
 
 function startVideo() {
-    navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    // navigator.mediaDevices.getUserMedia({ video: true, audio: false })
+    getDeviceStream({ video: true, audio: false })
         .then(function(stream) {
             playVideo(localVideo, stream);
             localStream = stream;
@@ -17,16 +22,28 @@ function startVideo() {
         });
 }
 
+function getDeviceStream(option) {
+    if ('getUserMedia' in navigator.mediaDevices) {
+        console.log('navigator.mediaDevices.getUserMedia');
+        return navigator.mediaDevices.getUserMedia(option);
+    } else {
+        console.log('wrap navigator.getUserMedia with Promise');
+        return new Promise(function(resolve, reject) {
+            navigator.getUserMedia(option, resolve, reject);
+        });
+    }
+}
+
 function playVideo(element, stream) {
     element.srcObject = stream;
     element.play();
 }
 
 function stopVideo() {
-        pauseVideo(localVideo);
-        stopLocalStream(localStream);
-        localStream = null;
-    }
+    pauseVideo(localVideo);
+    stopLocalStream(localStream);
+    localStream = null;
+}
 
 // WebRTCを利用する準備をする
 function prepareNewConnection() {

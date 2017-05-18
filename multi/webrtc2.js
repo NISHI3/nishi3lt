@@ -6,10 +6,11 @@ let remoteStreams = [];
 let remoteVideos = [];
 const MAX_CONNECTION_COUNT = 3;
 
-let container = document.getElementById('videocontainer');
-_assert('videocontainer', container);
+let container = document.getElementById('container');
+_assert('container', container);
 
-navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
+    navigator.mozGetUserMedia || navigator.msGetUserMedia;
 RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
 RTCSessionDescription = window.RTCSessionDescription || window.webkitRTCSessionDescription || window.mozRTCSessionDescription;
 
@@ -509,6 +510,7 @@ function getRoomName() {
         }
     }
     let room = 'room_' + getUniqueStr();
+    console.log(room);
     window.history.pushState(null, null, 'multi_firebase.html?' + room);
     return room;
 }

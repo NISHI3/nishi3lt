@@ -81,10 +81,10 @@ function ElementRequestFullscreen(element) {
     }
     return false;
 }
-var element = document.getElementById("video");
-element.onclick = function(e) {
-    ElementRequestFullscreen(element);
-};
+// var element = document.getElementById("video");
+// element.onclick = function(e) {
+//     ElementRequestFullscreen(element);
+// };
 
 //-- video elements end--//
 

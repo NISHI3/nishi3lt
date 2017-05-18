@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>FBVideoChat</title>
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script>
+        function _assert(desc, v) {
+            if (v) {
+                return;
+            } else {
+                let caller = _assert.caller || 'Top level';
+                console.error('ASSERT in %s, %s is :', caller, desc, v);
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">VideoChat(Firebase)</a>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <center>
+                    <button type="button" onclick="startVideo();">Start Video</button>
+                    <button type="button" onclick="stopVideo();">Stop Video</button>
+                    <button type="button" onclick="connect();">Connect</button>
+                    <button type="button" onclick="hangUp();">Hang Up</button>
+                    <br>
+                    <a id="room_link" href="" target="_blank">another window</a>
+                </center>
+                <br />
+                <video id="local_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>
+                <br>
+                <!--<p>SDP to send:<br />-->
+                <!--<textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>-->
+                </p>
+            </div>
+            <div class="col-md-6">
+                <center>
+                    <!--<button type="button" onclick="connect();">Connect</button>
+                    <button type="button" onclick="hangUp();">Hang Up</button>
+                    <a id="room_link" href="" target="_blank">another window</a>
+                    <a id="mail_link" href="" target="_blank">Mail link</a>-->
+                </center>
+                <br />
+                <!--<video id="remote_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>-->
+                <div id="container">
+                    <!--<p>SDP to receive:&nbsp;
+                    <button type="button" onclick="onSdpText();">Receive remote SDP</button><br />
+                    <textarea id="text_for_receive_sdp" rows="5" cols="60"></textarea>
+                </p>-->
+                </div>
+            </div>
+        </div>
+
+
+        <script src="js/jquary.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script type='text/javascript' src='./webrtc2.js'></script>
+</body>
+
+</html>

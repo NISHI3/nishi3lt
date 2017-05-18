@@ -2,7 +2,7 @@
 let localVideo = document.getElementById('local_video');
 let localStream = null;
 let peerConnections = [];
-let remoteSreams = [];
+let remoteStreams = [];
 let remoteVideos = [];
 const MAX_CONNECTION_COUNT = 3;
 
@@ -13,21 +13,22 @@ navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia 
 RTCPeerConnection = window.RTCPeerConnection || window.webkitRTCPeerConnection || window.mozRTCPeerConnection;
 RTCSessionDescription = window.RTCSessionDescription || window.webkitRTCSessionDescription || window.mozRTCSessionDescription;
 
+
 //-- video elements start--//
 function attachVideo(id, stream) {
     let video = addRemoteVideoElement(id);
     playVideo(video, stream);
-    video.volume = 0;
+    video.volume = 1.0;
 }
 
 function detachVideo(id) {
-    let video = getRemoveElement(id);
+    let video = getRemoteVideoElement(id);
     pauseVideo(video);
     deleteRemoteVideoElement(id);
 }
 
 function isRemoteVideoAttached(id) {
-    if (remoteVideo[id]) {
+    if (remoteVideos[id]) {
         return true;
     } else {
         return false;
@@ -42,14 +43,15 @@ function getRemoteVideoElement(id) {
 
 function deleteRemoteVideoElement(id) {
     _assert('deleteRemoteVideoElement() stream must exist', remoteVideos[id]);
-    remoteVideoElement('remote_video_' + id);
+    removeVideoElement('remote_video_' + id);
     delete remoteVideos[id];
 }
 
 function createVideoElement(elementId) {
     let video = document.createElement('video');
-    video.width = '240';
-    video.height = '180';
+    video.width = '480';
+    video.height = '360';
+    video.border = '1px solid black'
     video.id = elementId;
     video.style.border = 'solid black 1px';
     video.style.margin = '2px';
@@ -87,26 +89,30 @@ element.onclick = function(e) {
 
 //-- media handling --//
 function startVideo() {
-    getDeviceStream({ video: true, audio: false })
-        .then(function(stream) {
+    getDeviceStream({
+            video: true,
+            audio: true
+        }) // audio: false <-- ontrack once, audio:true --> ontrack twice!!
+        //navigator.mediaDevices.getUserMedia({video: true, audio: true})
+        .then(function(stream) { // success
             localStream = stream;
             playVideo(localVideo, stream);
-        }).catch(function(error) {
-            console.error('getUserMedia error: ', error);
+        }).catch(function(error) { // error
+            console.error('getUserMedia error:', error);
             return;
         });
 }
 
 function stopVideo() {
     pauseVideo(localVideo);
-    stopLocalStream(localVideo);
-    localStream - null;
+    stopLocalStream(localStream);
+    localStream = null;
 }
 
 function stopLocalStream(stream) {
     let tracks = stream.getTracks();
-    if (!track) {
-        console.warn('No tracks');
+    if (!tracks) {
+        console.warn('NO tracks');
         return;
     }
     for (let track of tracks) {
@@ -116,10 +122,10 @@ function stopLocalStream(stream) {
 
 function getDeviceStream(option) {
     if ('getUserMedia' in navigator.mediaDevices) {
-        console.log('navigator.mediaDevices.getUserMedia');
+        console.log('navigator.mediaDevices.getUserMadia');
         return navigator.mediaDevices.getUserMedia(option);
     } else {
-        console.log('wrap navigator.getUserMedia with Promise');
+        console.log('wrap navigator.getUserMadia with Promise');
         return new Promise(function(resolve, reject) {
             navigator.getUserMedia(option, resolve, reject);
         });
@@ -141,7 +147,7 @@ function pauseVideo(element) {
     if ('srcObject' in element) {
         element.srcObject = null;
     } else {
-        if (element.src && (element.src != '')) {
+        if (element.src && (element.src !== '')) {
             window.URL.revokeObjectURL(element.src);
         }
         element.src = '';
@@ -150,9 +156,9 @@ function pauseVideo(element) {
 
 //-- hand Signaling --//
 function sendSdp(id, sessionDescription) {
-    console.log('--sending sdp--');
+    console.log('---sending sdp ---');
     let message = { type: sessionDescription.type, sdp: sessionDescription.sdp };
-    console.log('sending SDP = ' + message);
+    console.log('sending SDP=' + message);
     emitTo(id, message);
 }
 
@@ -164,9 +170,7 @@ function sendIceCandiate(id, candidate) {
 
 //-- connection handling --//
 function prepareNewConnection(id) {
-    let pc_config = {
-        "iceServers": [{ "urls": "stun:stun.l.google.com:19302" }]
-    };
+    let pc_config = { "iceServers": [{ "urls": "stun:stun.l.google.com:19302" }] };
     let peer = new RTCPeerConnection(pc_config);
     if ('ontrack' in peer) {
         peer.ontrack = function(event) {
@@ -179,51 +183,70 @@ function prepareNewConnection(id) {
             }
         };
     } else {
-        peer.onicecandidate = function(evt) {
-            if (evt.candidate) {
-                console.log(evt.candidate);
-                sendIceCandiate(id, evt.candidate);
-            } else {
-                console.log('empty ice event');
-            }
+        peer.onaddstream = function(event) {
+            let stream = event.stream;
+            console.log('-- peer.onaddstream() stream.id=' + stream.id);
+            attachVideo(id, stream);
         };
-        peer.onnegotiationneeded = function(evt) {
-            console.log('-- onnegotiationneeded() ---');
-        };
-        // --- other events ----
-        peer.onicecandidateerror = function(evt) {
-            console.error('ICE candidate ERROR:', evt);
-        };
-        peer.onsignalingstatechange = function() {
-            console.log('== signaling status=' + peer.signalingState);
-        };
-        peer.oniceconnectionstatechange = function() {
-            console.log('== ice connection status=' + peer.iceConnectionState);
-            if (peer.iceConnectionState === 'disconnected') {
-                console.log('--disconnected');
-                stopConnection(id);
-            }
-        };
-        peer.onicegatheringstatechange = function() {
-            console.log('==***== ice gathering state=' + peer.iceGatheringState);
-        };
-        peer.onconnectionstatechange = function() {
-            console.log('==***== connection state=' + peer.connectionState);
-        };
-        peer.onremovestream = function(event) {
-            console.log('-- peer.onremovestream()');
-            //pauseVideo(remoteVideo);
-            deleteRemoteStream(id);
-            detachVideo(id);
-        };
-        if (localStream) {
-            console.log('Adding local stream...');
-            peer.addStream(localStream);
-        } else {
-            console.warn('no local stream, but continue.');
-        }
-        return peer;
     }
+
+    peer.onicecandidate = function(evt) {
+        if (evt.candidate) {
+            console.log(evt.candidate);
+
+            // Trickle ICE の場合は、ICE candidateを相手に送る
+            sendIceCandidate(id, evt.candidate);
+
+            // Vanilla ICE の場合には、何もしない
+        } else {
+            console.log('empty ice event');
+
+            // Trickle ICE の場合は、何もしない
+
+            // Vanilla ICE の場合には、ICE candidateを含んだSDPを相手に送る
+            //sendSdp(id, peer.localDescription);
+        }
+    };
+
+    // --- when need to exchange SDP ---
+    peer.onnegotiationneeded = function(evt) {
+        console.log('-- onnegotiationneeded() ---');
+    };
+
+    // --- other events ----
+    peer.onicecandidateerror = function(evt) {
+        console.error('ICE candidate ERROR:', evt);
+    };
+
+    peer.onsignalingstatechange = function() {
+        console.log('== signaling status=' + peer.signalingState);
+    };
+    peer.oniceconnectionstatechange = function() {
+        console.log('== ice connection status=' + peer.iceConnectionState);
+        if (peer.iceConnectionState === 'disconnected') {
+            console.log('-- disconnected --');
+            stopConnection(id);
+        }
+    };
+    peer.onicegatheringstatechange = function() {
+        console.log('==***== ice gathering state=' + peer.iceGatheringState);
+    };
+    peer.onconnectionstatechange = function() {
+        console.log('==***== connection state=' + peer.connectionState);
+    };
+    peer.onremovestream = function(event) {
+        console.log('-- peer.onremovestream()');
+        deleteRemoteStream(id);
+        detachVideo(id);
+    };
+    if (localStream) {
+        console.log('Adding local stream...');
+        peer.addStream(localStream);
+    } else {
+        console.warn('no local stream, but continue.');
+    }
+
+    return peer;
 }
 
 function makeOffer(id) {
@@ -334,6 +357,7 @@ function hangUp() {
     stopAllConnection();
 }
 
+// ---- multi party --
 function callMe() {
     emitRoom({
         type: 'call me'
@@ -351,30 +375,37 @@ var config = {
     messagingSenderId: "574247415591"
 };
 firebase.initializeApp(config);
+
 const dataDebugFlag = false;
 let room = getRoomName();
 let database = firebase.database();
-let databaseRoot = 'lt2017/multi';
+let databaseRoot = 'nishi3lt/multi/';
 let roomBroadcastRef;
 let clientRef;
 let clientId;
+
 joinRoom(room);
 serRoomLink(room);
 
 function joinRoom(room) {
     console.log('join room name = ' + room);
+
     let key = database.ref(databaseRoot + room + '/_join_').push({
         joined: 'unknown'
     }).key
     clientId = 'member_' + key;
-    console.log('join to room = ' + room + ' as clentId' + clientId);
-    database.ref(databaseRoot + room + '/_join_/' + key).uodate({
+    console.log('joined to room=' + room + ' as clientId=' + clientId);
+    database.ref(databaseRoot + room + '/_join_/' + key).update({
         joined: clientId
     });
+
+
+    // remove join object
     if (!dataDebugFlag) {
-        let joinRef = database.ref(databaseRoot + room + '/_join_/' + key);
-        joinRef.remove();
+        let jooinRef = database.ref(databaseRoot + room + '/_join_/' + key);
+        jooinRef.remove();
     }
+
     roomBroadcastRef = database.ref(databaseRoot + room + '/_broadcast_');
     roomBroadcastRef.on('child_added', function(data) {
         console.log('roomBroadcastRef.on(data) data.key=' + data.key + ', data.val():', data.val());
@@ -442,14 +473,15 @@ function joinRoom(room) {
     });
 }
 
-function serRoomLink(room) {
+function setRoomLink(room) {
     let url = document.location.href;
-    let anchoLink = document.getElementById('room_link');
+    let anchorLink = document.getElementById('room_link');
     anchorLink.href = url;
     let anchorMail = document.getElementById('mail_link');
-    let mailtoUrl = 'mailto:?subject=invitation-of-multi-videochat&body=' + url;
-    anchorMail = mailtoUrl;
+    let mailtoUrl = 'mailto:?subject=invitation-of-multi-party-videochat&body=' + url;
+    anchorMail.href = mailtoUrl;
 }
+
 //-- use firebase --//
 
 function emitRoom(msg) {
@@ -458,9 +490,9 @@ function emitRoom(msg) {
 }
 
 function emitTo(id, msg) {
-    console.log("== sending from= " + clientId + " , to= " + id);
+    console.log('===== sending from=' + clientId + ' ,  to=' + id);
     msg.from = clientId;
-    datbase.ref(databaseRoot + room + '/_direct_/' + id).push(msg);
+    database.ref(databaseRoot + room + '/_direct_/' + id).push(msg);
 }
 
 function clearMessage() {
@@ -477,14 +509,14 @@ function getRoomName() {
         }
     }
     let room = 'room_' + getUniqueStr();
-    window.history.pushState(null, null, 'webrtc-firebase.html?' + room);
+    window.history.pushState(null, null, 'multi_firebase.html?' + room);
     return room;
 }
 
 function getUniqueStr(myStrong) {
     var strong = 1000;
     if (myStrong) strong = myStrong;
-    return new Data().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16);
+    return new Date().getTime().toString(16) + Math.floor(strong * Math.random()).toString(16);
 }
 
 function isReadyToConnect() {
@@ -496,7 +528,7 @@ function isReadyToConnect() {
 }
 
 function getConnectionCount() {
-    return peerConnection.length;
+    return peerConnections.length;
 }
 
 function canConnectMore() {
@@ -504,7 +536,7 @@ function canConnectMore() {
 }
 
 function isConnectedWith(id) {
-    if (peerConnection[id]) {
+    if (peerConnections[id]) {
         return true;
     } else {
         return false;
@@ -524,7 +556,7 @@ function getConnection(id) {
 }
 
 function deleteConnection(id) {
-    _assert('deketeConnection() peer must exist', peerConnections[id]);
+    _assert('deleteConnection() peer must exist', peerConnections[id]);
     delete peerConnections[id];
 }
 
@@ -532,7 +564,7 @@ function stopConnection(id) {
     detachVideo(id);
     if (isConnectedWith(id)) {
         let peer = getConnection(id);
-        peer.close;
+        peer.close();
         deleteConnection(id);
     }
 }
@@ -541,4 +573,11 @@ function stopAllConnection() {
     for (let id in peerConnections) {
         stopConnection(id);
     }
+}
+
+function addRemoteVideoElement(id) {
+    _assert('addRemoteVideoElement() video must NOT EXIST', (!remoteVideos[id]));
+    let video = createVideoElement('remote_video_' + id);
+    remoteVideos[id] = video;
+    return video;
 }

@@ -163,9 +163,13 @@ function sendSdp(id, sessionDescription) {
     emitTo(id, message);
 }
 
-function sendIceCandiate(id, candidate) {
-    console.log('--sending ICE candidate--');
-    let obj = { type: 'candidate', ice: JSON.stringify(candidate) };
+function sendIceCandidate(id, candidate) {
+    console.log('---sending ICE candidate ---');
+    let obj = { type: 'candidate', ice: JSON.stringify(candidate) }; // <--- JSON
+    //let message = JSON.stringify(obj);
+    //console.log('sending candidate=' + message);
+    //ws.send(message);
+    //socket.emit('message', obj);
     emitTo(id, obj);
 }
 

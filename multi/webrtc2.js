@@ -390,7 +390,7 @@ let clientRef;
 let clientId;
 
 joinRoom(room);
-serRoomLink(room);
+setRoomLink(room);
 
 function joinRoom(room) {
     console.log('join room name = ' + room);

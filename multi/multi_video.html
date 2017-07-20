@@ -5,27 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>お絵かきの海</title>
+    <title>ビデオチャットの島</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/painter.css" type="text/css">
-    <style>
-        a {
-            color: #0088cc;
-            text-decoration: none;
-        }
-        .logo {
-            font-size: 60px;
-            text-align: center;
-            line-height: 60px;
-        }
-        .description {
-            text-align: center;
-        }
-        .subtitle {
-            padding-top: 10px;
-        }
-    </style>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
     <script>
         function _assert(desc, v) {
@@ -43,14 +25,10 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">お絵かきの海</a>
+                <a class="navbar-brand" href="#">ビデオチャットの島(WebRTC)</a>
             </div>
         </div>
     </nav>
-    <div id="section">
-        <canvas class="canvas-layer" id="canvasLayer"></canvas>
-        <canvas class="canvas-layer" id="canvasInterfaceLayer"></canvas>
-    </div>
     <center>
         <button type="button" onclick="startVideo();">Start Video</button>
         <button type="button" onclick="stopVideo();">Stop Video</button>
@@ -58,6 +36,7 @@
         <button type="button" onclick="hangUp();">Hang Up</button>
         <a id="room_link" href="" target="_blank">another window</a> 
     </center>
+    <br>
     <div class="container">
         <div class="row">
             <div class="col-lg-6">
@@ -79,23 +58,7 @@
 
         <script src="js/jquary.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/painter.js"></script>
-        <script>
-            (() => {
-
-                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '400');
-
-                painter.init({
-                type : 'pen', 
-                weight : 3, 
-                cap : 'round',
-                color : '#ff5fa6'
-                });
-
-            })();
-        </script>
-        <!--<script src="js/fullscreen.js"></script>-->
-        <script type='text/javascript' src='./webrtc2.js'></script>
+        <script type='text/javascript' src='./webrtc3.js'></script>
 </body>
 
 </html>

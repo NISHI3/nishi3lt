@@ -1,12 +1,14 @@
 //-- Media Stream --//
-let localVideo = document.getElementById('local_video');
+// let localVideo = document.getElementById('local_video');
 let localStream = null;
+let localStream2 = null;
 let peerConnections = [];
 let remoteStreams = [];
 let remoteVideos = [];
 const MAX_CONNECTION_COUNT = 3;
 
 let container = document.getElementById('container');
+let container2 = document.getElementById('container2');
 _assert('container', container);
 
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
@@ -51,12 +53,14 @@ function deleteRemoteVideoElement(id) {
 function createVideoElement(elementId) {
     let video = document.createElement('video');
     video.width = '400';
-    video.height = '300';
+    video.height = '200';
     video.border = '1px solid black'
     video.id = elementId;
     video.style.border = 'solid black 1px';
-    video.style.margin = '2px';
+    // video.style.margin = '2px';
+    video.className = "col-lg-3";
     container.appendChild(video);
+    container2.appendChild(video);
     return video;
 }
 
@@ -64,6 +68,7 @@ function removeVideoElement(elementId) {
     let video = document.getElementById(elementId);
     _assert('removeVideoElement() video must exist', video);
     container.removeChild(video);
+    container2.removeChild(video);
     return video;
 }
 
@@ -96,23 +101,25 @@ function startVideo() {
     }) // audio: false <-- ontrack once, audio:true --> ontrack twice!!
     //navigator.mediaDevices.getUserMedia({video: true, audio: true})
     .then(function(stream) { // success
-        localStream = stream;
-        playVideo(localVideo, stream);
+        localStream2 = stream;
+        // playVideo(localVideo, stream);
     }).catch(function(error) { // error
         console.error('getUserMedia error:', error);
         return;
     });
-    // const canvasToCapture = document.getElementById('canvasLayer');
-    // if (canvasToCapture) {
-    //   localStream = canvasToCapture.captureStream(30); // 30 fps
+    const canvasToCapture = document.getElementById('canvasLayer');
+    if (canvasToCapture) {
+      localStream = canvasToCapture.captureStream(30); // 30 fps
     //   localVideo.srcObject = localStream;
-    // }
+    }
 }
 
 function stopVideo() {
-    pauseVideo(localVideo);
+    // pauseVideo(localVideo);
     stopLocalStream(localStream);
+    stopLocalStream(localStream2);
     localStream = null;
+    localStream2 = null;
 }
 
 function stopLocalStream(stream) {
@@ -252,6 +259,12 @@ function prepareNewConnection(id) {
     if (localStream) {
         console.log('Adding local stream...');
         peer.addStream(localStream);
+    } else {
+        console.warn('no local stream, but continue.');
+    }
+    if (localStream2) {
+        console.log('Adding local stream...');
+        peer.addStream(localStream2);
     } else {
         console.warn('no local stream, but continue.');
     }
@@ -520,7 +533,7 @@ function getRoomName() {
     }
     let room = 'room_' + getUniqueStr();
     console.log(room);
-    window.history.pushState(null, null, 'multi_video.html?' + room);
+    window.history.pushState(null, null, 'multi_paintvideo.html?' + room);
     return room;
 }
 
@@ -532,6 +545,11 @@ function getUniqueStr(myStrong) {
 
 function isReadyToConnect() {
     if (localStream) {
+        return true;
+    } else {
+        return false;
+    }
+    if (localStream2) {
         return true;
     } else {
         return false;

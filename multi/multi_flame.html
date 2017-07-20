@@ -5,27 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>お絵かきの海</title>
+    <title>観測所</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/painter.css" type="text/css">
-    <style>
-        a {
-            color: #0088cc;
-            text-decoration: none;
-        }
-        .logo {
-            font-size: 60px;
-            text-align: center;
-            line-height: 60px;
-        }
-        .description {
-            text-align: center;
-        }
-        .subtitle {
-            padding-top: 10px;
-        }
-    </style>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
     <script>
         function _assert(desc, v) {
@@ -43,7 +26,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">お絵かきの海</a>
+                <a class="navbar-brand" href="#">観測所</a>
             </div>
         </div>
     </nav>
@@ -59,31 +42,17 @@
         <a id="room_link" href="" target="_blank">another window</a> 
     </center>
     <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <center>
-                    <video id="local_video" autoplay style="width: 400px; height: 300px; border: 1px solid black;"></video>
-                </center>
-                <!--<p>SDP to send:<br />-->
-                <!--<textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>-->
-                </p>
-            </div>
-            <div class="col-lg-6">
-                <center>
-                    <div id="container"></div>
-                </center>
-            </div>
-        </div>
+        <div class="row" id="container"></div>
     </div>
 
 
         <script src="js/jquary.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/painter.js"></script>
-        <script>
+         <script>
             (() => {
 
-                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '400');
+                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '0', '0');
 
                 painter.init({
                 type : 'pen', 
@@ -93,9 +62,9 @@
                 });
 
             })();
-        </script>
+        </script> 
         <!--<script src="js/fullscreen.js"></script>-->
-        <script type='text/javascript' src='./webrtc2.js'></script>
+        <script type='text/javascript' src='./webrtc6.js'></script>
 </body>
 
 </html>

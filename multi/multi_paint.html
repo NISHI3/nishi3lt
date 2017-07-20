@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>浦賀水道</title>
+    <title>送信所</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/painter.css" type="text/css">
@@ -26,7 +26,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">浦賀水道</a>
+                <a class="navbar-brand" href="#">送信所🍣</a>
             </div>
         </div>
     </nav>
@@ -34,48 +34,34 @@
         <canvas class="canvas-layer" id="canvasLayer"></canvas>
         <canvas class="canvas-layer" id="canvasInterfaceLayer"></canvas>
     </div>
+    <br>
     <center>
         <button type="button" onclick="startVideo();">Start Video</button>
         <button type="button" onclick="stopVideo();">Stop Video</button>
         <button type="button" onclick="connect();">Connect</button>
         <button type="button" onclick="hangUp();">Hang Up</button>
-        <a id="room_link" href="" target="_blank">another window</a> 
+        <a id="room_link" href="" target="_blank">another window</a>
     </center>
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-6">
-                <center>
-                    <div id="container2"></div>
-                </center>
-            </div>
-            <div class="col-lg-6">
-                <center>
-                    <div id="container"></div>
-                </center>
-            </div>
-        </div>
-    </div>
+    <center><h2>見たい人はこちら=><button type="button" onclick="watchPage()">見るだけページ</button></h2>
 
+    <script src="js/jquary.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/painter.js"></script>
+    <script>
+        (() => {
 
-        <script src="js/jquary.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/painter.js"></script>
-        <script>
-            (() => {
+            const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1200', '800');
 
-                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '400');
+            painter.init({
+            type : 'pen', 
+            weight : 3, 
+            cap : 'round',
+            color : '#ff5fa6'
+            });
 
-                painter.init({
-                type : 'pen', 
-                weight : 3, 
-                cap : 'round',
-                color : '#ff5fa6'
-                });
-
-            })();
-        </script>
-        <!--<script src="js/fullscreen.js"></script>-->
-        <script type='text/javascript' src='./webrtc4.js'></script>
+        })();
+    </script>
+    <script type='text/javascript' src='./webrtc5.js'></script>
 </body>
 
 </html>

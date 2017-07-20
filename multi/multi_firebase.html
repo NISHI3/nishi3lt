@@ -8,6 +8,24 @@
     <title>FBVideoChat</title>
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/painter.css" type="text/css">
+    <style>
+        a {
+            color: #0088cc;
+            text-decoration: none;
+        }
+        .logo {
+            font-size: 60px;
+            text-align: center;
+            line-height: 60px;
+        }
+        .description {
+            text-align: center;
+        }
+        .subtitle {
+            padding-top: 10px;
+        }
+    </style>
     <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
     <script>
         function _assert(desc, v) {
@@ -33,42 +51,49 @@
         <div class="row">
             <div class="col-md-6">
                 <center>
-                    <button type="button" onclick="startVideo();">Start Video</button>
-                    <button type="button" onclick="stopVideo();">Stop Video</button>
-                    <button type="button" onclick="connect();">Connect</button>
-                    <button type="button" onclick="hangUp();">Hang Up</button>
-                    <br>
-                    <a id="room_link" href="" target="_blank">another window</a>
+                    <video id="local_video" autoplay style="width: 400px; height: 300px; border: 1px solid black;"></video>
                 </center>
-                <br />
-                <video id="local_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>
-                <br>
                 <!--<p>SDP to send:<br />-->
                 <!--<textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>-->
                 </p>
             </div>
             <div class="col-md-6">
                 <center>
-                    <!--<button type="button" onclick="connect();">Connect</button>
-                    <button type="button" onclick="hangUp();">Hang Up</button>
-                    <a id="room_link" href="" target="_blank">another window</a>
-                    <a id="mail_link" href="" target="_blank">Mail link</a>-->
+                    <div id="container"></div>
                 </center>
-                <br />
-                <br>
-                <!--<video id="remote_video" autoplay style="width: 480px; height: 360px; border: 1px solid black;"></video>-->
-                <div id="container">
-                    <!--<p>SDP to receive:&nbsp;
-                    <button type="button" onclick="onSdpText();">Receive remote SDP</button><br />
-                    <textarea id="text_for_receive_sdp" rows="5" cols="60"></textarea>
-                </p>-->
-                </div>
             </div>
         </div>
+    </div>
+    <center>
+        <button type="button" onclick="startVideo();">Start Video</button>
+        <button type="button" onclick="stopVideo();">Stop Video</button>
+        <button type="button" onclick="connect();">Connect</button>
+        <button type="button" onclick="hangUp();">Hang Up</button>
+        <a id="room_link" href="" target="_blank">another window</a> 
+    </center>
+    <div id="section">
+        <canvas class="canvas-layer" id="canvasLayer"></canvas>
+        <canvas class="canvas-layer" id="canvasInterfaceLayer"></canvas>
+    </div>
 
 
         <script src="js/jquary.min.js"></script>
         <script src="js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="js/painter.js"></script>
+        <script>
+            (() => {
+
+                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '400');
+
+                painter.init({
+                type : 'pen', 
+                weight : 3, 
+                cap : 'round',
+                color : '#ff5fa6'
+                });
+
+            })();
+        </script>
         <!--<script src="js/fullscreen.js"></script>-->
         <script type='text/javascript' src='./webrtc2.js'></script>
 </body>

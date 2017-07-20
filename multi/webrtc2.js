@@ -50,8 +50,8 @@ function deleteRemoteVideoElement(id) {
 
 function createVideoElement(elementId) {
     let video = document.createElement('video');
-    video.width = '480';
-    video.height = '360';
+    video.width = '400';
+    video.height = '300';
     video.border = '1px solid black'
     video.id = elementId;
     video.style.border = 'solid black 1px';
@@ -90,18 +90,23 @@ function ElementRequestFullscreen(element) {
 
 //-- media handling --//
 function startVideo() {
-    getDeviceStream({
-            video: true,
-            audio: true
-        }) // audio: false <-- ontrack once, audio:true --> ontrack twice!!
-        //navigator.mediaDevices.getUserMedia({video: true, audio: true})
-        .then(function(stream) { // success
-            localStream = stream;
-            playVideo(localVideo, stream);
-        }).catch(function(error) { // error
-            console.error('getUserMedia error:', error);
-            return;
-        });
+    // getDeviceStream({
+    //         video: true,
+    //         audio: true
+    // }) // audio: false <-- ontrack once, audio:true --> ontrack twice!!
+    // //navigator.mediaDevices.getUserMedia({video: true, audio: true})
+    // .then(function(stream) { // success
+    //     localStream = stream;
+    //     playVideo(localVideo, stream);
+    // }).catch(function(error) { // error
+    //     console.error('getUserMedia error:', error);
+    //     return;
+    // });
+    const canvasToCapture = document.getElementById('canvasLayer');
+    if (canvasToCapture) {
+      localStream = canvasToCapture.captureStream(30); // 30 fps
+      localVideo.srcObject = localStream;
+    }
 }
 
 function stopVideo() {

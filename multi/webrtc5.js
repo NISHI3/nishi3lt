@@ -596,5 +596,5 @@ function addRemoteVideoElement(id) {
 
 function watchPage() {
     'multi_paint.html?' + room
-    window.open().location.href = 'http://localhost:8200/multi/'+'multi_flame.html?' + room;
+    window.open().location.href = 'https://nishi3.github.io/nishi3lt/multi/'+'multi_flame.html?' + room;
 }

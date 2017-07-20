@@ -43,7 +43,7 @@
     <nav class="navbar navbar-default">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand" href="#">お絵かきの海(Paint+Frame)</a>
+                <a class="navbar-brand" href="#">お絵かきの海</a>
             </div>
         </div>
     </nav>
@@ -59,15 +59,20 @@
         <a id="room_link" href="" target="_blank">another window</a> 
     </center>
     <div class="container">
-        <!-- <div class="row"> -->
-            <!-- <div class="col-lg-4">
-                    <video id="local_video" autoplay style="width: 400px; height: 300px; border: 1px solid black;"></video>
-            </div> -->
-            <!-- <div class="col-lg-6"> -->
+        <div class="row">
+            <div class="col-lg-6">
                 <center>
-                    <div class="row" id="container"></div>
+                    <video id="local_video" autoplay style="width: 400px; height: 300px; border: 1px solid black;"></video>
                 </center>
-            <!-- </div> -->
+                <!--<p>SDP to send:<br />-->
+                <!--<textarea id="text_for_send_sdp" rows="5" cols="60" readonly="readonly">SDP to send</textarea>-->
+                </p>
+            </div>
+            <div class="col-lg-6">
+                <center>
+                    <div id="container"></div>
+                </center>
+            </div>
         </div>
     </div>
 
@@ -78,7 +83,7 @@
         <script>
             (() => {
 
-                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '600');
+                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '400');
 
                 painter.init({
                 type : 'pen', 

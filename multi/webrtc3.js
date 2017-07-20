@@ -51,12 +51,12 @@ function deleteRemoteVideoElement(id) {
 function createVideoElement(elementId) {
     let video = document.createElement('video');
     video.width = '400';
-    video.height = '200';
+    video.height = '300';
     video.border = '1px solid black'
     video.id = elementId;
     video.style.border = 'solid black 1px';
-    // video.style.margin = '2px';
-    video.className = "col-lg-3";
+    video.style.margin = '2px';
+    container.appendChild("<div class=\"col-lg-6\">")
     container.appendChild(video);
     return video;
 }
@@ -521,7 +521,7 @@ function getRoomName() {
     }
     let room = 'room_' + getUniqueStr();
     console.log(room);
-    window.history.pushState(null, null, 'multi_firebase.html?' + room);
+    window.history.pushState(null, null, 'multi_paint1.html?' + room);
     return room;
 }
 

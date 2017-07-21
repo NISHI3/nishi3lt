@@ -19,9 +19,12 @@ RTCSessionDescription = window.RTCSessionDescription || window.webkitRTCSessionD
 
 //-- video elements start--//
 function attachVideo(id, stream) {
+    console.log("id: "+id);
     let video = addRemoteVideoElement(id);
+    let video2 = addRemoteVideoElement2(id);
     playVideo(video, stream);
-    video.volume = 1.0;
+    playVideo(video2, stream);
+    video.volume = 0;
 }
 
 function detachVideo(id) {
@@ -58,16 +61,34 @@ function createVideoElement(elementId) {
     video.id = elementId;
     video.style.border = 'solid black 1px';
     // video.style.margin = '2px';
-    video.className = "col-lg-3";
+    video.className = "col-lg-4";
     container.appendChild(video);
-    container2.appendChild(video);
     return video;
+}
+function createVideoElement2(elementId) {
+    let video2 = document.createElement('video');
+    video2.width = '400';
+    video2.height = '200';
+    video2.border = '1px solid black'
+    video2.id = elementId;
+    video2.style.border = 'solid black 1px';
+    // video.style.margin = '2px';
+    video.className = "col-lg-4";
+    container2.appendChild(video2);
+    return video2;
 }
 
 function removeVideoElement(elementId) {
     let video = document.getElementById(elementId);
     _assert('removeVideoElement() video must exist', video);
     container.removeChild(video);
+    container2.removeChild(video);
+    return video;
+}
+
+function removeVideoElement2(elementId) {
+    let video = document.getElementById(elementId);
+    _assert('removeVideoElement() video must exist', video);
     container2.removeChild(video);
     return video;
 }
@@ -266,7 +287,7 @@ function prepareNewConnection(id) {
         console.log('Adding local stream...');
         peer.addStream(localStream2);
     } else {
-        console.warn('no local stream, but continue.');
+        console.warn('no local stream2, but continue.');
     }
 
     return peer;
@@ -549,11 +570,6 @@ function isReadyToConnect() {
     } else {
         return false;
     }
-    if (localStream2) {
-        return true;
-    } else {
-        return false;
-    }
 }
 
 function getConnectionCount() {
@@ -607,6 +623,13 @@ function stopAllConnection() {
 function addRemoteVideoElement(id) {
     _assert('addRemoteVideoElement() video must NOT EXIST', (!remoteVideos[id]));
     let video = createVideoElement('remote_video_' + id);
+    remoteVideos[id] = video;
+    return video;
+}
+
+function addRemoteVideoElement2(id) {
+    _assert('addRemoteVideoElement() video must NOT EXIST', (!remoteVideos[id]));
+    let video = createVideoElement2('remote_video_' + id);
     remoteVideos[id] = video;
     return video;
 }

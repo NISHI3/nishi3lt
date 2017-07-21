@@ -4,7 +4,7 @@ let localStream = null;
 let peerConnections = [];
 let remoteStreams = [];
 let remoteVideos = [];
-const MAX_CONNECTION_COUNT = 3;
+const MAX_CONNECTION_COUNT = 4;
 
 let container = document.getElementById('container');
 _assert('container', container);
@@ -50,13 +50,13 @@ function deleteRemoteVideoElement(id) {
 
 function createVideoElement(elementId) {
     let video = document.createElement('video');
-    video.width = '400';
-    video.height = '200';
-    video.border = '1px solid black'
+    video.width = '690';
+    video.height = '350';
+    video.border = '1px solid blue'
     video.id = elementId;
     video.style.border = 'solid black 1px';
-    // video.style.margin = '2px';
-    video.className = "col-lg-3";
+    video.style.padding = ' 0px 1px';
+    video.className = "col-lg-6";
     container.appendChild(video);
     return video;
 }

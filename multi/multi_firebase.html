@@ -9,7 +9,29 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/painter.css" type="text/css">
-    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+
+    <!-- Add Firebase products that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+
+    <script>
+        var config = {
+            apiKey: "AIzaSyDO4f0oz84hozRESWKEy5_iqfkMiPmmDks",
+            authDomain: "analytics-test-80947.firebaseapp.com",
+            databaseURL: "https://analytics-test-80947.firebaseio.com",
+            projectId: "analytics-test-80947",
+            storageBucket: "analytics-test-80947.appspot.com",
+            messagingSenderId: "574247415591",
+            appId: "1:574247415591:web:62800b4501c035e1dec302"
+        };
+        firebase.initializeApp(config);
+    </script>
+
     <script>
         function _assert(desc, v) {
             if (v) {

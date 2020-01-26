@@ -377,16 +377,16 @@ function callMe() {
 
 
 //-- use firebase --//
-var config = {
-    apiKey: "AIzaSyDO4f0oz84hozRESWKEy5_iqfkMiPmmDks",
-    authDomain: "analytics-test-80947.firebaseapp.com",
-    databaseURL: "https://analytics-test-80947.firebaseio.com",
-    projectId: "analytics-test-80947",
-    storageBucket: "analytics-test-80947.appspot.com",
-    messagingSenderId: "574247415591",
-    appId: "1:574247415591:web:62800b4501c035e1dec302"
-};
-firebase.initializeApp(config);
+// var config = {
+//     apiKey: "AIzaSyDO4f0oz84hozRESWKEy5_iqfkMiPmmDks",
+//     authDomain: "analytics-test-80947.firebaseapp.com",
+//     databaseURL: "https://analytics-test-80947.firebaseio.com",
+//     projectId: "analytics-test-80947",
+//     storageBucket: "analytics-test-80947.appspot.com",
+//     messagingSenderId: "574247415591",
+//     appId: "1:574247415591:web:62800b4501c035e1dec302"
+// };
+// firebase.initializeApp(config);
 
 const dataDebugFlag = false;
 let room = getRoomName();

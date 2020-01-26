@@ -105,8 +105,8 @@ function startVideo() {
     // });
     const canvasToCapture = document.getElementById('canvasLayer');
     if (canvasToCapture) {
-      localStream = canvasToCapture.captureStream(30); // 30 fps
-      localVideo.srcObject = localStream;
+        localStream = canvasToCapture.captureStream(30); // 30 fps
+        localVideo.srcObject = localStream;
     }
 }
 
@@ -133,7 +133,7 @@ function getDeviceStream(option) {
         return navigator.mediaDevices.getUserMedia(option);
     } else {
         console.log('wrap navigator.getUserMedia with Promise');
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             navigator.getUserMedia(option, resolve, reject);
         });
     }
@@ -184,7 +184,7 @@ function prepareNewConnection(id) {
     let pc_config = { "iceServers": [{ "urls": "stun:stun.l.google.com:19302" }] };
     let peer = new RTCPeerConnection(pc_config);
     if ('ontrack' in peer) {
-        peer.ontrack = function(event) {
+        peer.ontrack = function (event) {
             let stream = event.streams[0];
             console.log('-- peer.ontrack() stream.id=' + stream.id);
             if (isRemoteVideoAttached(id)) {
@@ -194,14 +194,14 @@ function prepareNewConnection(id) {
             }
         };
     } else {
-        peer.onaddstream = function(event) {
+        peer.onaddstream = function (event) {
             let stream = event.stream;
             console.log('-- peer.onaddstream() stream.id=' + stream.id);
             attachVideo(id, stream);
         };
     }
 
-    peer.onicecandidate = function(evt) {
+    peer.onicecandidate = function (evt) {
         if (evt.candidate) {
             console.log(evt.candidate);
 
@@ -220,32 +220,32 @@ function prepareNewConnection(id) {
     };
 
     // --- when need to exchange SDP ---
-    peer.onnegotiationneeded = function(evt) {
+    peer.onnegotiationneeded = function (evt) {
         console.log('-- onnegotiationneeded() ---');
     };
 
     // --- other events ----
-    peer.onicecandidateerror = function(evt) {
+    peer.onicecandidateerror = function (evt) {
         console.error('ICE candidate ERROR:', evt);
     };
 
-    peer.onsignalingstatechange = function() {
+    peer.onsignalingstatechange = function () {
         console.log('== signaling status=' + peer.signalingState);
     };
-    peer.oniceconnectionstatechange = function() {
+    peer.oniceconnectionstatechange = function () {
         console.log('== ice connection status=' + peer.iceConnectionState);
         if (peer.iceConnectionState === 'disconnected') {
             console.log('-- disconnected --');
             stopConnection(id);
         }
     };
-    peer.onicegatheringstatechange = function() {
+    peer.onicegatheringstatechange = function () {
         console.log('==***== ice gathering state=' + peer.iceGatheringState);
     };
-    peer.onconnectionstatechange = function() {
+    peer.onconnectionstatechange = function () {
         console.log('==***== connection state=' + peer.connectionState);
     };
-    peer.onremovestream = function(event) {
+    peer.onremovestream = function (event) {
         console.log('-- peer.onremovestream()');
         deleteRemoteStream(id);
         detachVideo(id);
@@ -266,17 +266,17 @@ function makeOffer(id) {
     addConnection(id, peerConnection);
 
     peerConnection.createOffer()
-        .then(function(sessionDescription) {
+        .then(function (sessionDescription) {
             console.log('createOffer() succsess in promise');
             return peerConnection.setLocalDescription(sessionDescription);
-        }).then(function() {
+        }).then(function () {
             console.log('setLocalDescription() succsess in promise');
 
             // -- Trickle ICE の場合は、初期SDPを相手に送る -- 
             sendSdp(id, peerConnection.localDescription);
 
             // -- Vanilla ICE の場合には、まだSDPは送らない --
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error(err);
         });
 }
@@ -292,10 +292,10 @@ function setOffer(id, sessionDescription) {
     addConnection(id, peerConnection);
 
     peerConnection.setRemoteDescription(sessionDescription)
-        .then(function() {
+        .then(function () {
             console.log('setRemoteDescription(offer) succsess in promise');
             makeAnswer(id);
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error('setRemoteDescription(offer) ERROR: ', err);
         });
 }
@@ -309,17 +309,17 @@ function makeAnswer(id) {
     }
 
     peerConnection.createAnswer()
-        .then(function(sessionDescription) {
+        .then(function (sessionDescription) {
             console.log('createAnswer() succsess in promise');
             return peerConnection.setLocalDescription(sessionDescription);
-        }).then(function() {
+        }).then(function () {
             console.log('setLocalDescription() succsess in promise');
 
             // -- Trickle ICE の場合は、初期SDPを相手に送る -- 
             sendSdp(id, peerConnection.localDescription);
 
             // -- Vanilla ICE の場合には、まだSDPは送らない --
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error(err);
         });
 }
@@ -332,9 +332,9 @@ function setAnswer(id, sessionDescription) {
     }
 
     peerConnection.setRemoteDescription(sessionDescription)
-        .then(function() {
+        .then(function () {
             console.log('setRemoteDescription(answer) succsess in promise');
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.error('setRemoteDescription(answer) ERROR: ', err);
         });
 }
@@ -383,7 +383,8 @@ var config = {
     databaseURL: "https://analytics-test-80947.firebaseio.com",
     projectId: "analytics-test-80947",
     storageBucket: "analytics-test-80947.appspot.com",
-    messagingSenderId: "574247415591"
+    messagingSenderId: "574247415591",
+    appId: "1:574247415591:web:62800b4501c035e1dec302"
 };
 firebase.initializeApp(config);
 
@@ -418,7 +419,7 @@ function joinRoom(room) {
     }
 
     roomBroadcastRef = database.ref(databaseRoot + room + '/_broadcast_');
-    roomBroadcastRef.on('child_added', function(data) {
+    roomBroadcastRef.on('child_added', function (data) {
         console.log('roomBroadcastRef.on(data) data.key=' + data.key + ', data.val():', data.val());
         let message = data.val();
         let fromId = message.from;
@@ -450,7 +451,7 @@ function joinRoom(room) {
     });
 
     clientRef = database.ref(databaseRoot + room + '/_direct_/' + clientId);
-    clientRef.on('child_added', function(data) {
+    clientRef.on('child_added', function (data) {
         console.log('clientRef.on(data)  data.key=' + data.key + ', data.val():', data.val());
         let message = data.val();
         let fromId = message.from;

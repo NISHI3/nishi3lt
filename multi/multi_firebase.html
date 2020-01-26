@@ -9,7 +9,7 @@
     <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/painter.css" type="text/css">
-    <script src="https://www.gstatic.com/firebasejs/3.9.0/firebase.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.7.0/firebase-app.js"></script>
     <script>
         function _assert(desc, v) {
             if (v) {
@@ -39,41 +39,41 @@
         <button type="button" onclick="stopVideo();">Stop Video</button>
         <button type="button" onclick="connect();">Connect</button>
         <button type="button" onclick="hangUp();">Hang Up</button>
-        <a id="room_link" href="" target="_blank">another window</a> 
+        <a id="room_link" href="" target="_blank">another window</a>
     </center>
     <div class="container">
         <!-- <div class="row"> -->
-            <!-- <div class="col-lg-4">
+        <!-- <div class="col-lg-4">
                     <video id="local_video" autoplay style="width: 400px; height: 300px; border: 1px solid black;"></video>
             </div> -->
-            <!-- <div class="col-lg-6"> -->
-                <center>
-                    <div class="row" id="container"></div>
-                </center>
-            <!-- </div> -->
-        </div>
+        <!-- <div class="col-lg-6"> -->
+        <center>
+            <div class="row" id="container"></div>
+        </center>
+        <!-- </div> -->
+    </div>
     </div>
 
 
-        <script src="js/jquary.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/painter.js"></script>
-        <script>
-            (() => {
+    <script src="js/jquary.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/painter.js"></script>
+    <script>
+        (() => {
 
-                const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '600');
+            const painter = canvasPainter('canvasLayer', 'canvasInterfaceLayer', '1000', '600');
 
-                painter.init({
-                type : 'pen', 
-                weight : 3, 
-                cap : 'round',
-                color : '#ff5fa6'
-                });
+            painter.init({
+                type: 'pen',
+                weight: 3,
+                cap: 'round',
+                color: '#ff5fa6'
+            });
 
-            })();
-        </script>
-        <!--<script src="js/fullscreen.js"></script>-->
-        <script type='text/javascript' src='./webrtc2.js'></script>
+        })();
+    </script>
+    <!--<script src="js/fullscreen.js"></script>-->
+    <script type='text/javascript' src='./webrtc2.js'></script>
 </body>
 
 </html>

@@ -91,7 +91,6 @@ function ElementRequestFullscreen(element) {
 //-- media handling --//
 function startVideo() {
     getDeviceStream({
-        video: true,
         audio: true,
         video: { width: 1980, height: 1080 }
     }) // audio: false <-- ontrack once, audio:true --> ontrack twice!!
